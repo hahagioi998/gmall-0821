@@ -2,6 +2,7 @@ package com.atguigu.gmall.pms.controller;
 
 import java.util.List;
 
+import com.atguigu.gmall.pms.vo.SpuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import com.atguigu.gmall.pms.service.SpuService;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.common.bean.PageParamVo;
+
+import javax.xml.ws.Response;
 
 /**
  * spu信息
@@ -45,6 +48,13 @@ public class SpuController {
         return ResponseVo.ok(pageResultVo);
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ResponseVo<PageResultVo> querySpuListBySearchConditionsAndCategoryId(
+            @PathVariable("categoryId")Long categoryId, PageParamVo pageParamVo){
+        PageResultVo pageResultVo = spuService.querySpuListBySearchConditionsAndCategoryId(categoryId,pageParamVo);
+        return ResponseVo.ok(pageResultVo);
+    }
+
 
     /**
      * 信息
@@ -62,8 +72,10 @@ public class SpuController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SpuEntity spu){
-		spuService.save(spu);
+    public ResponseVo<Object> save(@RequestBody SpuVo spu){
+//		spuService.save(spu);
+
+        this.spuService.bigSave(spu);
 
         return ResponseVo.ok();
     }
@@ -86,7 +98,6 @@ public class SpuController {
     @ApiOperation("删除")
     public ResponseVo delete(@RequestBody List<Long> ids){
 		spuService.removeByIds(ids);
-
         return ResponseVo.ok();
     }
 
