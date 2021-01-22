@@ -27,10 +27,10 @@ import org.springframework.util.CollectionUtils;
 public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBoundsEntity> implements SkuBoundsService {
 
     @Autowired
-    private SkuLadderMapper skuLadderMapper;
+    private SkuFullReductionServiceImpl skuFullReductionService;
 
     @Autowired
-    private SkuFullReductionMapper skuFullReductionMapper;
+    private SkuLadderServiceImpl skuLadderService;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -46,6 +46,14 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
     public void saveSales(SkuSaleVo skuSaleVo) {
 
         //3.1 保存sms_sku_bounds
+        bigSave2SmsSkuBounds(skuSaleVo);
+        //3.2 保存sms_sku_full_reduction
+        skuFullReductionService.bigSave2SmsSkuFullReduction(skuSaleVo);
+        //3.3 保存sms_sku_ladder
+        skuLadderService.bigSave2SmsSkuLadder(skuSaleVo);
+    }
+
+    public void bigSave2SmsSkuBounds(SkuSaleVo skuSaleVo) {
         SkuBoundsEntity skuBoundsEntity = new SkuBoundsEntity();
         BeanUtils.copyProperties(skuSaleVo,skuBoundsEntity);
         List<Integer> work = skuSaleVo.getWork();
@@ -53,16 +61,6 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
             skuBoundsEntity.setWork(work.get(3)*8+work.get(2)*4+work.get(1)*2+work.get(0));
         }
         this.save(skuBoundsEntity);
-        //3.2 保存sms_sku_full_reduction
-        SkuFullReductionEntity skuFullReductionEntity = new SkuFullReductionEntity();
-        BeanUtils.copyProperties(skuSaleVo,skuFullReductionEntity);
-        skuFullReductionEntity.setAddOther(skuSaleVo.getAddOther());
-        skuFullReductionMapper.insert(skuFullReductionEntity);
-        //3.3 保存sms_sku_ladder
-        SkuLadderEntity skuLadderEntity = new SkuLadderEntity();
-        BeanUtils.copyProperties(skuSaleVo,skuLadderEntity);
-        skuLadderEntity.setAddOther(skuSaleVo.getLadderAddOther());
-        skuLadderMapper.insert(skuLadderEntity);
     }
 
 }

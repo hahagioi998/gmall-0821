@@ -23,6 +23,7 @@
         <module>gmall-sms</module>
         <module>gmall-gateway</module>
         <module>gmall-sms-interface</module>
+        <module>gmall-wms</module>
     </modules>
 
     <properties>
