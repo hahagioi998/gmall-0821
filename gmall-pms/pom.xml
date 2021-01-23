@@ -15,6 +15,16 @@
     <description>谷粒商城商品管理系统</description>
 
     <dependencies>
+        <!--分布式事务的依赖-->
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-all</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-seata</artifactId>
+        </dependency>
         <!--项目相关的依赖-->
         <dependency>
             <groupId>com.atguigu</groupId>
