@@ -1,5 +1,8 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.atguigu.gmall.pms.entity.AttrEntity;
+import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
+import com.atguigu.gmall.pms.mapper.AttrMapper;
 import com.atguigu.gmall.pms.vo.SpuAttrValueVo;
 import com.atguigu.gmall.pms.vo.SpuVo;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +31,9 @@ public class SpuAttrValueServiceImpl extends ServiceImpl<SpuAttrValueMapper, Spu
     @Autowired
     private SpuAttrValueService spuAttrValueService;
 
+    @Autowired
+    private AttrMapper attrMapper;
+
     public void bigSave2PmsSpuAttrValue(SpuVo spu, Long spuId) {
         List<SpuAttrValueVo> baseAttrs = spu.getBaseAttrs();
         List<SpuAttrValueEntity> collect = null;
@@ -52,4 +58,20 @@ public class SpuAttrValueServiceImpl extends ServiceImpl<SpuAttrValueMapper, Spu
         return new PageResultVo(page);
     }
 
+    @Override
+    public List<SpuAttrValueEntity> querySearchAttrValuesByCidAndSpuId(Long cid, Long spuId) {
+        //根据cid查询出检索类型的规格参数
+        List<AttrEntity> attrEntities = attrMapper.selectList(new QueryWrapper<AttrEntity>()
+                .eq("category_id", cid)
+                .eq("search_type", 1));
+        if(CollectionUtils.isEmpty(attrEntities)){
+            return null;
+        }
+        List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
+        //根据spuId和attrIds查询出基本类型的检索规格参数值
+        List<SpuAttrValueEntity> spuAttrValueEntities = this.list(new QueryWrapper<SpuAttrValueEntity>()
+                .eq("spu_id", spuId)
+                .in("attr_id", attrIds));
+        return spuAttrValueEntities;
+    }
 }

@@ -48,6 +48,15 @@ public class SpuController {
         return ResponseVo.ok(pageResultVo);
     }
 
+    //ES导入数据所需接口1：分页查询spu接口
+    @PostMapping("json")
+    @ApiOperation("分页查询")
+    public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo){
+        PageResultVo pageResultVo = spuService.queryPage(paramVo);
+
+        return ResponseVo.ok((List<SpuEntity>)pageResultVo.getList());
+    }
+
     @GetMapping("/category/{categoryId}")
     public ResponseVo<PageResultVo> querySpuListBySearchConditionsAndCategoryId(
             @PathVariable("categoryId")Long categoryId, PageParamVo pageParamVo){
