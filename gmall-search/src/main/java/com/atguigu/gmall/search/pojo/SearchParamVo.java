@@ -27,7 +27,7 @@ public class SearchParamVo {
     //规格参数的过滤条件：["4:8G-12G","5:128G-256G-512G"]
     private List<String> props;
     //排序字段：0-默认，根据得分降序排列；1-价格升序；2-价格降序；3-销量降序；4-新品降序
-    private Integer sort;
+    private Integer sort = 0;
     //价格区间过滤
     private Double priceFrom;
     private Double priceTo;
