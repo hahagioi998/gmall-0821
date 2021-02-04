@@ -23,8 +23,11 @@ public class SearchController {
     public String search(SearchParamVo searchParamVo, Model model){
         SearchResponseVo responseVo =  searchService.search(searchParamVo);
         //key=response，不是随便写的，是前端页面main组件中th:Object="${response}"中写的，解析的Object是response
+        //response, searchParam都是从前端工程中找出来的
         model.addAttribute("response", responseVo);
+        model.addAttribute("searchParam",searchParamVo);
         return "search";
+//        return ResponseVo.ok(responseVo);
     }
 
 }

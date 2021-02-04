@@ -56,12 +56,12 @@
                     <!-- 点击x时，去掉地址栏中的品牌过滤条件 -->
                     <a th:href="@{${#strings.replace(location, '&brandId='+ #strings.arrayJoin(searchParam.brandId, ','), '')}}">×</a>
                 </li>
-                <li th:if="${not #lists.isEmpty(searchParam.cid)}" class="with-x">
+                <li th:if="${not #lists.isEmpty(searchParam.categoryId)}" class="with-x">
                     <span>分类：</span>
                     <!-- 分类也可以多选，多选时情况下分类名称以空格分割 -->
                     <span th:each="category : *{categories}" th:text="${category.name + ' '}"></span>
                     <!-- 点击x时，去掉地址栏中的分类过滤条件 -->
-                    <a th:href="@{${#strings.replace(location, '&cid='+ #strings.arrayJoin(searchParam.cid, ','), '')}}">×</a>
+                    <a th:href="@{${#strings.replace(location, '&categoryId='+ #strings.arrayJoin(searchParam.categoryId, ','), '')}}">×</a>
                 </li>
                 <li th:each="prop : ${searchParam.props}" class="with-x">
                     <!-- 规格参数的格式为“8:128G-256G”，这里获取“:”号后的规格参数展示 -->
@@ -103,7 +103,7 @@
                 </div>
             </div>
             <!-- 分类过滤：只有一个分类或者已经选择了分类时，不显示分类过滤 -->
-            <div class="type-wrap" th:if="${response.categories != null && response.categories.size() > 1 && searchParam.cid == null}">
+            <div class="type-wrap" th:if="${response.categories != null && response.categories.size() > 1 && searchParam.categoryId == null}">
                 <!-- 过滤名称写死，就是分类 -->
                 <div class="fl key">分类</div>
                 <div class="fl value">
@@ -111,7 +111,7 @@
                         <!-- 遍历所有分类过滤条件 -->
                         <li th:each="category : *{categories}">
                             <!-- 展示分类名称，点击时把分类id拼接到地址栏 -->
-                            <a th:text="${category.name}" th:href="@{${location + '&cid=' + category.id}}">GSM（移动/联通2G）</a>
+                            <a th:text="${category.name}" th:href="@{${location + '&categoryId=' + category.id}}">GSM（移动/联通2G）</a>
                         </li>
                     </ul>
                 </div>

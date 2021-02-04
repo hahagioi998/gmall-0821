@@ -22,6 +22,8 @@ spring:
       uris: http://192.168.80.180:9200
   jackson:
     default-property-inclusion: non_null #让@ResponseBody使用Jackson做反序列化时，过滤掉空的字段
+  thymeleaf:
+    cache: false #开发环境一般关闭，否则改动之后看不出效果due to cache；到了生产环境需要打开
 feign:
   sentinel:
     enabled: true

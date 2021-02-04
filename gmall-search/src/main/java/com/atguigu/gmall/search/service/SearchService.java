@@ -201,7 +201,7 @@ public class SearchService {
         //1.2.1 构建品牌的过滤：brand
         List<Long> brandId = searchParamVo.getBrandId();
         //DSL：bool-->must[{match:title},filter[brandId]
-        if(CollectionUtils.isEmpty(brandId)){
+        if(!CollectionUtils.isEmpty(brandId)){
             TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("brandId", brandId);
             boolQueryBuilder.filter(termsQueryBuilder);
         }
@@ -209,9 +209,9 @@ public class SearchService {
         //1.2.2 构建分类的过滤：category
         List<Long> categoryId = searchParamVo.getCategoryId();
         //DSL：bool-->must[{match:title},filter[brandId,categoryId]
-        if(CollectionUtils.isEmpty(categoryId)){
-            TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("categoryId", categoryId);
-            boolQueryBuilder.filter(termQueryBuilder);
+        if(!CollectionUtils.isEmpty(categoryId)){
+            TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("categoryId", categoryId);
+            boolQueryBuilder.filter(termsQueryBuilder);
         }
 
         //1.2.3 构建价格区间的过滤：priceFrom，priceTo
@@ -289,7 +289,7 @@ public class SearchService {
         searchSourceBuilder
                 .aggregation(AggregationBuilders.terms("brandIdAgg").field("brandId")
                         .subAggregation(AggregationBuilders.terms("brandNameAgg").field("brandName"))
-                        .subAggregation(AggregationBuilders.terms("brandImageAgg").field("brandImage")));
+                        .subAggregation(AggregationBuilders.terms("brandLogoAgg").field("logo")));
 
         //5.2 构建分类聚合：categoryIdAgg
         searchSourceBuilder.aggregation(AggregationBuilders.terms("categoryIdAgg").field("categoryId")
