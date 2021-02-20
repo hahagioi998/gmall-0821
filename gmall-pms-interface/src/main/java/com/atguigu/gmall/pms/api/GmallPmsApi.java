@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface GmallPmsApi {
 
+    @GetMapping("pms/spu/{id}")
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
     //ES导入数据所需接口1：分页查询spu接口
     @PostMapping("pms/spu/json")
     public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo);
@@ -24,6 +27,10 @@ public interface GmallPmsApi {
     //ES导入数据所需接口5：根据分类id查询分类
     @GetMapping("/pms/category/{id}")
     public ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
+
+    //首页工程index-service的查询一级分类的接口，可以把parentId传为0即可，表示自己就是一级分类
+    @GetMapping("/pms/category/parent/{parentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid);
 
     //ES导入数据所需接口6：根据skuId结合分类id，查询销售类型（type=1）的检索规格参数和值（attrName,attrValue)
     @GetMapping("/pms/skuattrvalue/search/{cid}")

@@ -35,6 +35,9 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @GetMapping("/")
+    
+
     @GetMapping("/parent/{parentId}")
     public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid){
         QueryWrapper<CategoryEntity> wrapper = new QueryWrapper<CategoryEntity>();

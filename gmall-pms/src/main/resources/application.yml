@@ -27,6 +27,14 @@ spring:
     password: 123456Abc@
   redis:
     host: 192.168.80.180
+  rabbitmq:
+    host: 192.168.80.180
+    port: 5672
+    virtual-host: /oono
+    username: oono
+    password: 123456
+    publisher-confirm-type: correlated
+    publisher-returns: true
 feign:
   sentinel:
     enabled: true

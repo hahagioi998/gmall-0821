@@ -15,6 +15,11 @@
     <description>谷粒商城商品管理系统</description>
 
     <dependencies>
+        <!--消息中间件的依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
         <!--分布式事务的依赖-->
         <dependency>
             <groupId>io.seata</groupId>
