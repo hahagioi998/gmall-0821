@@ -32,6 +32,9 @@ public interface GmallPmsApi {
     @GetMapping("/pms/category/parent/{parentId}")
     public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid);
 
+    @GetMapping("/pms/category/parent/withsubs/{pid}")
+    public ResponseVo<List<CategoryEntity>> queryLvl2CatesWithSubsByPid(@PathVariable("pid")Long pid);
+
     //ES导入数据所需接口6：根据skuId结合分类id，查询销售类型（type=1）的检索规格参数和值（attrName,attrValue)
     @GetMapping("/pms/skuattrvalue/search/{cid}")
     public ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValuesByCidAndSkuId(

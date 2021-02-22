@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class IndexController {
     }
 
     @GetMapping("/index/cates/{pid}")
+    @ResponseBody
     public ResponseVo<List<CategoryEntity>> queryLv2CategoriesWithSubsByPid(
             @PathVariable("pid")Long pid
     ) {

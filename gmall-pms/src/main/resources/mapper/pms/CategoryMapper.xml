@@ -2,4 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.gmall.pms.mapper.CategoryMapper">
 
+    <!--
+        查询结果集的封装在mybatis中有两种方式：
+        1. resultType：单表sql语句的结果集分装
+        2. resultMap：多表关联或者复杂的sql语句结果集的封装
+
+        mybatis中的关联查询可以两种写法：
+        1. 通过一个关联join查询两表
+        2. 分布查询，好处是可以延迟加载
+    -->
+
+    <!--resultMap可以自定义映射关系：
+        id：唯一标识
+        type：结果集最终映射的类型，应该写全路径保险，但是我们在配置中加入了mybatis的别名扫描，所以可以写类名即可
+        autoMapping：自动映射，只要字段名/属性名和sql语句的字段名一致，就可以自动映射
+            但是官方推荐一定要自己写一个主键映射，可以提高性能
+        子标签：
+            id：定义主键的映射关系，可以提高性能
+            result：定义其他普通属性的映射关系，非主键/非自定义的类型
+            association：一对一映射
+            collection：一对多映射
+    -->
+    <resultMap id="queryLvl2CatesWithSubsByPidResultMap" type="CategoryEntity" autoMapping="true">
+        <!--二级分类的主键映射关系-->
+        <id column="id" property="id"></id>
+        <collection property="subs" javaType="list" ofType="CategoryEntity" select="queryLvl2CatesWithSubsByPid" column="id">
+        </collection>
+    </resultMap>
+    
+    <select id="queryLvl2CatesWithSubsByPid" resultMap="queryLvl2CatesWithSubsByPidResultMap">
+        select * from pms_category where parent_id=#{pid}
+    </select>
+
 </mapper>

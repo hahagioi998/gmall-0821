@@ -35,7 +35,11 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/")
+    @GetMapping("parent/withsubs/{pid}")
+    public ResponseVo<List<CategoryEntity>> queryLvl2CatesWithSubsByPid(@PathVariable("pid")Long pid){
+        List<CategoryEntity> categoryEntities = categoryService.queryLvl2CatesWithSubsByPid(pid);
+        return ResponseVo.ok(categoryEntities);
+    }
     
 
     @GetMapping("/parent/{parentId}")

@@ -22,6 +22,9 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         //设置过滤逻辑
         corsConfiguration.addAllowedOrigin("http://manager.gmall.com");
+        corsConfiguration.addAllowedOrigin("http://localhost:1000");
+        corsConfiguration.addAllowedOrigin("http://www.gmall.com");
+        corsConfiguration.addAllowedOrigin("http://gmall.com");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);//允许携带cookies
