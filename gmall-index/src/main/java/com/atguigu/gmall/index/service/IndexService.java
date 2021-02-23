@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class IndexService {
@@ -38,7 +41,13 @@ public class IndexService {
         //再去查询db，放入redis
         ResponseVo<List<CategoryEntity>> responseVo = gmallPmsClient.queryLvl2CatesWithSubsByPid(pid);
         List<CategoryEntity> categoryEntities = responseVo.getData();
-        redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntities));
+        //为了防止缓存穿透，数据即使不存在也缓存/或者用布隆过滤器，更稳
+        if(CollectionUtils.isEmpty(categoryEntities)){
+            redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntities), 5, TimeUnit.MINUTES);
+        }else {
+            //为了防止缓存雪崩，给缓存时间添加随机值
+            redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntities), 30 + new Random(10).nextInt(), TimeUnit.DAYS);
+        }
 
         return categoryEntities;
     }
