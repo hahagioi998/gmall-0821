@@ -6,12 +6,13 @@
         <groupId>com.atguigu</groupId>
         <artifactId>gmall-0821</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.atguigu</groupId>
-    <artifactId>gmall-index</artifactId>
+    <artifactId>gmall-item</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gmall-index</name>
-    <description>谷粒商城首页服务</description>
+    <name>gmall-item</name>
+    <description>谷粒商城商品详情页</description>
 
     <dependencies>
         <dependency>
@@ -21,16 +22,26 @@
         </dependency>
         <dependency>
             <groupId>com.atguigu</groupId>
-            <artifactId>gmall-pms-interface</artifactId>
+            <artifactId>gmall-pms</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>gmall-sms</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>gmall-wms</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
+            <artifactId>spring-cloud-alibaba-nacos-config</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-alibaba-nacos-config</artifactId>
+            <artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -62,14 +73,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!--Redisson-->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>3.15.0</version>
-        </dependency>
-
     </dependencies>
 
     <build>

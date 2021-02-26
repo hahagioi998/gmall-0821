@@ -20,6 +20,8 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.common.bean.PageParamVo;
 
+import javax.xml.ws.Response;
+
 /**
  * 商品三级分类
  *
@@ -35,12 +37,17 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @GetMapping("all/{cid}")
+    public ResponseVo<List<CategoryEntity>> query123CategoriesByCid3(@PathVariable("cid")Long cid){
+        List<CategoryEntity> categoryEntities =  categoryService.query123CategoriesByCid3(cid);
+        return ResponseVo.ok(categoryEntities);
+    }
+
     @GetMapping("parent/withsubs/{pid}")
     public ResponseVo<List<CategoryEntity>> queryLvl2CatesWithSubsByPid(@PathVariable("pid")Long pid){
         List<CategoryEntity> categoryEntities = categoryService.queryLvl2CatesWithSubsByPid(pid);
         return ResponseVo.ok(categoryEntities);
     }
-    
 
     @GetMapping("/parent/{parentId}")
     public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable("parentId")Long pid){
