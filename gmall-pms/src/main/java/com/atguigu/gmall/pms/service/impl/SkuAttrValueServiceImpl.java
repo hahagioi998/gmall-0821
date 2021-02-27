@@ -1,13 +1,19 @@
 package com.atguigu.gmall.pms.service.impl;
 
 import com.atguigu.gmall.pms.entity.AttrEntity;
+import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.pms.mapper.AttrMapper;
+import com.atguigu.gmall.pms.mapper.SkuMapper;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import com.atguigu.gmall.pms.vo.SkuVo;
+import com.baomidou.mybatisplus.core.conditions.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -30,6 +36,9 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
 
     @Autowired
     private AttrMapper attrMapper;
+
+    @Autowired
+    private SkuMapper skuMapper;
 
     public void bigSave2PmsSkuAttrValue(SkuVo sku, Long skuId) {
         List<SkuAttrValueEntity> saleAttrs = sku.getSaleAttrs();
@@ -64,6 +73,43 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
                 .eq("sku_id", skuId)
                 .in("attr_id", attrIds));
         return attrValueEntities;
+    }
+
+    @Override
+    public List<SaleAttrValueVo> querySaleAttrsBySpuId(Long spuId) {
+
+
+
+        //查询spu下所有的sku
+        List<SkuEntity> skuEntities = skuMapper.selectList(new QueryWrapper<SkuEntity>().eq("spu_id", spuId));
+        if(CollectionUtils.isEmpty(skuEntities)){
+            return null;
+        }
+        //搜集所有的skuId
+        List<Long> skuIds = skuEntities.stream().map(SkuEntity::getId).collect(Collectors.toList());
+
+        //查询sku对应的销售属性
+        List<SkuAttrValueEntity> skuAttrValueEntities = this.list(new QueryWrapper<SkuAttrValueEntity>().in("sku_id", skuIds));
+        if(CollectionUtils.isEmpty(skuAttrValueEntities)){
+            return null;
+        }
+
+        //对集合重新分组
+        //Collectors工具类中groupingBy方法，将集合重新整理，按照某个属性进行分组的操作，参数自然是某个属性/字段，用方法引用即可
+        //以attrId分组：attrId-key List<SkuAttrValueEntity>-value 这样的数据结构
+        Map<Long, List<SkuAttrValueEntity>> map = skuAttrValueEntities.stream().collect(Collectors.groupingBy(SkuAttrValueEntity::getAttrId));
+
+        //把map转换成我们返回值需要的vo对象
+        List<SaleAttrValueVo> saleAttrValueVos = new ArrayList<>();
+        map.forEach((attrId, attrValueEntities) -> {
+            SaleAttrValueVo saleAttrValueVo = new SaleAttrValueVo();
+            saleAttrValueVo.setAttrId(attrId);
+            saleAttrValueVo.setAttrName(attrValueEntities.get(0).getAttrName());
+            Set<String> set = attrValueEntities.stream().map(SkuAttrValueEntity::getAttrValue).collect(Collectors.toSet());
+            saleAttrValueVo.setAttrValues(set);
+            saleAttrValueVos.add(saleAttrValueVo);
+        });
+        return saleAttrValueVos;
     }
 
 }

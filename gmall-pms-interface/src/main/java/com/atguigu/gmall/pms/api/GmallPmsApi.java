@@ -3,12 +3,17 @@ package com.atguigu.gmall.pms.api;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.*;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 public interface GmallPmsApi {
+
+    //商品详情页所需接口8：根据sku中的spuId查询spu下所有的销售属性
+    @GetMapping("pms/skuattrvalue/spu/{spuId}")
+    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrsBySpuId(@PathVariable("spuId")Long spuId);
 
     //商品详情页所需接口4：根据spuId查询spu
     @GetMapping("pms/spu/{id}")
@@ -56,6 +61,10 @@ public interface GmallPmsApi {
             @PathVariable("cid")Long cid,
             @RequestParam("skuId")Long skuId
     );
+
+    //商品详情页所需接口9：根据skuId查询spu下所有销售属性组合与skuId的映射关系
+    @GetMapping("pms/skuattrvalue/sku/{skuId}")
+    public ResponseVo<List<SkuAttrValueEntity>> querySaleAttrValuesBySkuId(@PathVariable("skuId")Long skuId);
 
     //ES导入数据所需接口7：根据spuId结合分类id，查询销售类型（type=0）的检索规格参数和值（attrName,attrValue）
     @GetMapping("pms/spuattrvalue/search/{cid}")
