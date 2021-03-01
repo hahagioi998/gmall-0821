@@ -2,11 +2,16 @@ package com.atguigu.gmall.pms.service.impl;
 
 import com.atguigu.gmall.pms.entity.AttrEntity;
 import com.atguigu.gmall.pms.mapper.AttrMapper;
+import com.atguigu.gmall.pms.mapper.SkuAttrValueMapper;
+import com.atguigu.gmall.pms.mapper.SpuAttrValueMapper;
+import com.atguigu.gmall.pms.vo.GroupVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +28,12 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
 
     @Autowired
     private AttrMapper attrMapper;
+
+    @Autowired
+    private SpuAttrValueMapper spuAttrValueMapper;
+
+    @Autowired
+    private SkuAttrValueMapper skuAttrValueMapper;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -49,6 +60,38 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
             attrGroupEntity.setAttrEntities(attrEntities);
         });
         return attrGroupEntities;
+    }
+
+    @Override
+    public List<GroupVo> queryGroupWithAttrValuesBy(Long cid, Long spuId, Long skuId) {
+
+        //1. 根据分类id查询出所有的分组信息
+        List<AttrGroupEntity> groupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("category_id", cid));
+
+        if(CollectionUtils.isEmpty(groupEntities)){
+            return null;
+        }
+
+        groupEntities.stream().map(attrGroupEntity -> {
+            GroupVo groupVo = new GroupVo();
+
+            //2. 获取每个分组下的规格参数列表 --> attrIds
+            List<AttrEntity> attrEntities = attrMapper.selectList(new QueryWrapper<AttrEntity>().eq("group_id", attrGroupEntity.getId()));
+            if(!CollectionUtils.isEmpty(attrEntities)){
+
+                //获取attrId
+                List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
+
+                //3. 查询基本的规格参数和值
+                //查询基本的规格参数和值
+
+                //查询销售的规格参数和值
+            }
+
+
+        }).collect(Collectors.toList());
+
+
     }
 
 }

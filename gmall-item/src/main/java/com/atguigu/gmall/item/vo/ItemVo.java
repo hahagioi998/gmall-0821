@@ -2,6 +2,7 @@ package com.atguigu.gmall.item.vo;
 
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
+import com.atguigu.gmall.pms.vo.GroupVo;
 import lombok.Data;
 
 import java.math.BigDecimal;

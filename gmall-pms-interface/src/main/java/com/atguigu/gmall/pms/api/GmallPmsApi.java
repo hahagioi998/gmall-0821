@@ -4,7 +4,6 @@ import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.*;
 import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +17,10 @@ public interface GmallPmsApi {
     //商品详情页所需接口4：根据spuId查询spu
     @GetMapping("pms/spu/{id}")
     public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
+    //商品详情页所需接口10：根据spuId查询spu的描述信息
+    @GetMapping("{spuId}")
+    public ResponseVo<SpuDescEntity> querySpuDescById(@PathVariable("spuId") Long spuId);
 
     //ES导入数据所需接口1：分页查询spu接口
     @PostMapping("pms/spu/json")
@@ -62,7 +65,7 @@ public interface GmallPmsApi {
             @RequestParam("skuId")Long skuId
     );
 
-    //商品详情页所需接口9：根据skuId查询spu下所有销售属性组合与skuId的映射关系
+    //商品详情页所需接口10：根据skuId查询spu下所有销售属性组合与skuId的映射关系
     @GetMapping("pms/skuattrvalue/sku/{skuId}")
     public ResponseVo<List<SkuAttrValueEntity>> querySaleAttrValuesBySkuId(@PathVariable("skuId")Long skuId);
 
