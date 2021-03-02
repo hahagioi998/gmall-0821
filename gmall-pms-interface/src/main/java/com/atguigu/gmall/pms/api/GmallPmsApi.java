@@ -3,6 +3,7 @@ package com.atguigu.gmall.pms.api;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.*;
+import com.atguigu.gmall.pms.vo.GroupVo;
 import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,5 +76,12 @@ public interface GmallPmsApi {
             @PathVariable("cid")Long cid,
             @RequestParam("spuId")Long spuId
     );
+
+    //商品详情页所需接口11：根据分类id，spuId，skuId，查询分组及组下的规格参数及值
+    @GetMapping("pms/attrgroup/category/spuId/skuId/{cid}")
+    public ResponseVo<List<GroupVo>> queryGroupWithAttrValuesBy(
+            @PathVariable("cid")Long cid,
+            @RequestParam("spuId")Long spuId,
+            @RequestParam("skuId")Long skuId);
 
 }

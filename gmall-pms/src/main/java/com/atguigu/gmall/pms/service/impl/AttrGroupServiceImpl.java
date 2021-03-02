@@ -1,13 +1,18 @@
 package com.atguigu.gmall.pms.service.impl;
 
 import com.atguigu.gmall.pms.entity.AttrEntity;
+import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
+import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.atguigu.gmall.pms.mapper.AttrMapper;
 import com.atguigu.gmall.pms.mapper.SkuAttrValueMapper;
 import com.atguigu.gmall.pms.mapper.SpuAttrValueMapper;
+import com.atguigu.gmall.pms.vo.AttrValueVo;
 import com.atguigu.gmall.pms.vo.GroupVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -72,7 +77,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
             return null;
         }
 
-        groupEntities.stream().map(attrGroupEntity -> {
+        return groupEntities.stream().map(attrGroupEntity -> {
             GroupVo groupVo = new GroupVo();
 
             //2. 获取每个分组下的规格参数列表 --> attrIds
@@ -82,16 +87,36 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
                 //获取attrId
                 List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
 
-                //3. 查询基本的规格参数和值
-                //查询基本的规格参数和值
+                List<AttrValueVo> attrValueVos = new ArrayList<>();
 
-                //查询销售的规格参数和值
+                //3. 查询基本的规格参数和值
+                List<SpuAttrValueEntity> spuAttrValueEntities = spuAttrValueMapper.selectList(new QueryWrapper<SpuAttrValueEntity>().eq("spu_id", spuId));
+                if(!CollectionUtils.isEmpty(spuAttrValueEntities)){
+                    attrValueVos.addAll(spuAttrValueEntities.stream().map(spuAttrValueEntity -> {
+                        AttrValueVo attrValueVo = new AttrValueVo();
+                        BeanUtils.copyProperties(spuAttrValueEntity, attrValueVo);
+                        return attrValueVo;
+                    }).collect(Collectors.toList()));
+                }
+
+                //4. 查询销售的规格参数和值
+                List<SkuAttrValueEntity> skuAttrValueEntities = skuAttrValueMapper.selectList(new QueryWrapper<SkuAttrValueEntity>().eq("sku_id", skuId));
+                if(!CollectionUtils.isEmpty(skuAttrValueEntities)){
+                    attrValueVos.addAll(skuAttrValueEntities.stream().map(skuAttrValueEntity -> {
+                        AttrValueVo attrValueVo = new AttrValueVo();
+                        BeanUtils.copyProperties(skuAttrValueEntity,attrValueVo);
+                        return attrValueVo;
+                    }).collect(Collectors.toList()));
+                }
+
+                groupVo.setAttrValue(attrValueVos);
             }
 
+            groupVo.setId(attrGroupEntity.getId());
+            groupVo.setName(attrGroupEntity.getName());
+
+            return groupVo;
 
         }).collect(Collectors.toList());
-
-
     }
-
 }
